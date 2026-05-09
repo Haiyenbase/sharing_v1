@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khảo sát kỹ năng mềm · SE / DA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:    #0f0e17;
+    --ink2:   #3d3c4a;
+    --ink3:   #8e8da0;
+    --bg:     #f5f4f0;
+    --surface:#ffffff;
+    --accent: #4f46e5;
+    --accent2:#7c3aed;
+    --green:  #059669;
+    --border: #e2e1dc;
+    --radius: 14px;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 660px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .hero {
+    margin-bottom: 40px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: #ede9fe;
+    border-radius: 99px;
+    padding: 5px 12px;
+    margin-bottom: 18px;
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.4; transform:scale(1.4); }
+  }
+  h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 14px;
+  }
+  h1 span { color: var(--accent); }
+  .sub {
+    font-size: 15px;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink3);
+    white-space: nowrap;
+  }
+
+  /* ── Section card ── */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    transition: box-shadow .2s;
+  }
+  .section:focus-within {
+    box-shadow: 0 0 0 3px #ede9fe;
+  }
+  .q-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .q-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+  .q-hint {
+    font-size: 13px;
+    color: var(--ink3);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  /* ── Role pills ── */
+  .role-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .role-btn {
+    border: 1.5px solid var(--border);
+    background: none;
+    border-radius: 99px;
+    padding: 10px 22px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--ink2);
+    transition: all .18s;
+  }
+  .role-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .role-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ── Skill cards ── */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 10px;
+  }
+  .skill-card {
+    border: 1.5px solid var(--border);
+    background: none;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .skill-card.active {
+    border-color: var(--accent);
+    background: #f5f3ff;
+  }
+  .skill-card.active::after {
+    content: '✓';
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--accent);
+    color: #fff;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .skill-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+    line-height: 1;
+  }
+  .skill-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .skill-desc {
+    font-size: 11px;
+    color: var(--ink3);
+    line-height: 1.5;
+  }
+  .skill-card.active .skill-name { color: var(--accent2); }
+
+  /* ── Format chips ── */
+  .fmt-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .fmt-btn {
+    border: 1.5px solid var(--border);
+    background: none;
+    border-radius: 99px;
+    padding: 9px 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--ink2);
+    transition: all .18s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .fmt-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .fmt-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ── Textarea ── */
+  textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 90px;
+    background: var(--bg);
+    transition: border-color .18s;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--accent); background: #fff; }
+  textarea::placeholder { color: var(--ink3); }
+
+  /* ── Input text/email ── */
+  .text-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--bg);
+    transition: border-color .18s;
+    outline: none;
+  }
+  .text-input:focus { border-color: var(--accent); background: #fff; }
+  .text-input::placeholder { color: var(--ink3); }
+  .input-wrap {
+    position: relative;
+  }
+  .input-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--ink3);
+    pointer-events: none;
+  }
+  .input-wrap .text-input { padding-left: 40px; }
+
+  /* ── Other skill textarea ── */
+  .other-skill-wrap {
+    margin-top: 12px;
+    display: none;
+  }
+  .other-skill-wrap.show { display: block; }
+  .other-skill-wrap textarea { min-height: 60px; }
+
+  /* ── Bang ghi chu 3 cot ── */
+  .note-table-wrap {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .note-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .note-table thead th {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 10px 12px;
+    text-align: left;
+    letter-spacing: .03em;
+  }
+  .note-table tbody tr { border-bottom: 1px solid var(--border); }
+  .note-table tbody tr:last-child { border-bottom: none; }
+  .note-table tbody td {
+    padding: 0;
+    vertical-align: top;
+    border-right: 1px solid var(--border);
+    width: 33.33%;
+  }
+  .note-table tbody td:last-child { border-right: none; }
+  .note-table tbody td textarea {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 10px 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    min-height: 90px;
+    resize: vertical;
+    outline: none;
+    color: var(--ink);
+  }
+  .note-table tbody td textarea:focus { background: #f5f3ff; }
+  .note-table tbody td textarea::placeholder { color: var(--ink3); }
+  .note-hint { font-size: 12px; color: var(--ink3); margin-top: 8px; line-height: 1.5; }
+
+  /* ── Submit ── */
+  .submit-wrap { margin-top: 24px; }
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+  .note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink3);
+    margin-top: 12px;
+  }
+
+  /* ── Error ── */
+  .error-msg {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #b91c1c;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ── Success screen ── */
+  #success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .check-circle {
+    width: 72px; height: 72px;
+    background: #d1fae5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+    animation: pop .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+  #success-screen h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  #success-screen p {
+    font-size: 15px;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+  #success-screen .summary {
+    margin-top: 28px;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+  }
+  .sum-row { font-size: 13px; color: var(--ink2); margin-bottom: 8px; }
+  .sum-row strong { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">Nội bộ · SE / DA Team</div>
+    <h1>Kỹ năng mềm nào<br>bạn muốn <span>được chia sẻ?</span></h1>
+    <p class="sub">Sau thời gian thực chiến với khách hàng, team mình sẽ tổ chức chuỗi sharing về kỹ năng mềm. Điền khảo sát để mình lên nội dung phù hợp nhất với mọi người nhé!</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="progress-label" id="progress-label">0 / 5 mục</div>
+  </div>
+
+  <!-- FORM -->
+  <div id="form-view">
+
+    <!-- Q1: Vai trò -->
+    <div class="section">
+      <div class="q-label">01</div>
+      <div class="q-title">Bạn đang ở vai trò nào?</div>
+      <div class="role-grid" id="roles">
+        <button class="role-btn" onclick="pick('role',this,'SE')">SE</button>
+        <button class="role-btn" onclick="pick('role',this,'DA')">DA</button>
+        <button class="role-btn" onclick="pick('role',this,'Cả hai')">Cả hai</button>
+        <button class="role-btn" onclick="pick('role',this,'Khác')">Khác</button>
+      </div>
+    </div>
+
+    <!-- Q2: Kỹ năng -->
+    <div class="section">
+      <div class="q-label">02</div>
+      <div class="q-title">Kỹ năng mềm nào bạn muốn được chia sẻ? <span class="q-hint">Chọn nhiều</span></div>
+      <div class="skill-grid" id="skills">
+        <button class="skill-card" onclick="multi('skill',this,'Giao tiếp với KH')">
+          <span class="skill-icon">💬</span>
+          <div class="skill-name">Giao tiếp với KH</div>
+          <div class="skill-desc">Đặt câu hỏi, lắng nghe, quản lý kỳ vọng</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Thuyết trình & demo')">
+          <span class="skill-icon">🎤</span>
+          <div class="skill-name">Thuyết trình & demo</div>
+          <div class="skill-desc">Pitching giải pháp, demo thuyết phục</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Xử lý tình huống khó')">
+          <span class="skill-icon">⚡</span>
+          <div class="skill-name">Xử lý tình huống khó</div>
+          <div class="skill-desc">KH phản đối, escalation, crisis</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Thương lượng & đàm phán')">
+          <span class="skill-icon">🤝</span>
+          <div class="skill-name">Thương lượng & đàm phán</div>
+          <div class="skill-desc">Scope, timeline, budget với KH</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Storytelling dữ liệu')">
+          <span class="skill-icon">📊</span>
+          <div class="skill-name">Storytelling dữ liệu</div>
+          <div class="skill-desc">Kể chuyện bằng insight, số liệu</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Viết tài liệu & email')">
+          <span class="skill-icon">✍️</span>
+          <div class="skill-name">Viết tài liệu & email</div>
+          <div class="skill-desc">Proposal, report, email chuyên nghiệp</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Quản lý thời gian')">
+          <span class="skill-icon">⏱️</span>
+          <div class="skill-name">Quản lý thời gian</div>
+          <div class="skill-desc">Nhiều dự án, nhiều KH cùng lúc</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Làm việc nhóm liên phòng ban')">
+          <span class="skill-icon">🧩</span>
+          <div class="skill-name">Làm việc nhóm liên phòng ban</div>
+          <div class="skill-desc">Phối hợp Dev, PM, Sales</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Tư duy phân tích vấn đề')">
+          <span class="skill-icon">🧠</span>
+          <div class="skill-name">Tư duy phân tích vấn đề</div>
+          <div class="skill-desc">Structured thinking, root cause</div>
+        </button>
+        <button class="skill-card" onclick="multi('skill',this,'Quản lý cảm xúc & áp lực')">
+          <span class="skill-icon">🧘</span>
+          <div class="skill-name">Quản lý cảm xúc & áp lực</div>
+          <div class="skill-desc">Giữ bình tĩnh khi KH căng thẳng</div>
+        </button>
+        <button class="skill-card" id="card-other-skill" onclick="toggleOtherSkill(this)">
+          <span class="skill-icon">✏️</span>
+          <div class="skill-name">Kỹ năng khác</div>
+          <div class="skill-desc">Tự nhập kỹ năng bạn muốn được chia sẻ</div>
+        </button>
+      </div>
+      <div class="other-skill-wrap" id="other-skill-wrap">
+        <textarea id="other-skill-input" placeholder="Nhập kỹ năng bạn quan tâm, ví dụ: Kỹ năng coaching, Xây dựng mối quan hệ dài hạn với KH..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <!-- Q3: Email -->
+    <div class="section">
+      <div class="q-label">03</div>
+      <div class="q-title">Email của bạn <span class="q-hint">Tuỳ chọn</span></div>
+      <div class="input-wrap">
+        <span class="input-icon">✉️</span>
+        <input type="email" id="email" class="text-input" placeholder="ten@company.com" oninput="updateProgress()">
+      </div>
+    </div>
+
+    <!-- Q4: Bang ghi chu -->
+    <div class="section">
+      <div class="q-label">04</div>
+      <div class="q-title">Bạn muốn thêm điều gì không? <span class="q-hint">Tuỳ chọn</span></div>
+      <div class="note-table-wrap">
+        <table class="note-table">
+          <thead>
+            <tr>
+              <th>Kỹ năng</th>
+              <th>Hình thức sharing</th>
+              <th>Nội dung cần tìm hiểu</th>
+              <th>Vướng mắc</th>
+            </tr>
+          </thead>
+          <tbody id="note-tbody">
+            <tr id="note-empty-row"><td colspan="4" style="text-align:center;padding:18px;color:var(--ink3);font-size:13px;">👆 Chọn kỹ năng ở mục 02 để tự động thêm dòng vào đây</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note-hint">💡 Điền những kỹ năng bạn muốn đào sâu — không cần điền hết tất cả ô.</p>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-wrap">
+      <button class="btn-submit" id="btn" onclick="submitForm()">
+        <span id="btn-text">Gửi khảo sát</span>
+        <span>→</span>
+      </button>
+      <div class="error-msg" id="err-msg"></div>
+      <p class="note">Kết quả chỉ dùng để lên kế hoạch nội dung sharing</p>
+    </div>
+
+  </div><!-- /#form-view -->
+
+  <!-- SUCCESS -->
+  <div id="success-screen">
+    <div class="check-circle">✓</div>
+    <h2>Cảm ơn bạn!</h2>
+    <p>Phản hồi của bạn đã được ghi nhận.<br>Team sẽ tổng hợp và lên lịch chuỗi sharing sớm nhất nhé!</p>
+    <div class="summary">
+      <div class="sum-row">🎭 <strong>Vai trò:</strong> <span id="s-role"></span></div>
+      <div class="sum-row">⭐ <strong>Kỹ năng quan tâm:</strong> <span id="s-skills"></span></div>
+      <div class="sum-row">🎯 <strong>Hình thức ưa thích:</strong> <span id="s-fmt"></span></div>
+      <div class="sum-row">✉️ <strong>Email:</strong> <span id="s-email"></span></div>
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<script>
+  // ── CẤU HÌNH: dán URL Apps Script của bạn vào đây ──
+  const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+  // ─────────────────────────────────────────────────────
+
+  const state = { role: null, skills: new Set(), fmt: new Set() };
+
+  function pick(type, el, val) {
+    document.querySelectorAll('#roles .role-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    state.role = val;
+    updateProgress();
+  }
+
+  function multi(type, el, val) {
+    el.classList.toggle('active');
+    const set = type === 'skill' ? state.skills : state.fmt;
+    set.has(val) ? set.delete(val) : set.add(val);
+    updateProgress();
+    if (type === 'skill') syncNoteTable();
+  }
+
+  // Chip hình thức sharing — dùng trong bảng
+  const FMT_OPTIONS = [
+    { val: 'Case study thực tế', icon: '🎬' },
+    { val: 'Workshop thực hành', icon: '🛠️' },
+    { val: 'Talk & Q&A',         icon: '🎙️' },
+    { val: 'Video ngắn',         icon: '📱' },
+    { val: 'Tài liệu đọc',       icon: '📄' },
+  ];
+
+  function fmtChips() {
+    return FMT_OPTIONS.map(function(o) {
+      return '<span data-fmt="'+o.val+'" onclick="toggleFmt(this)" style="display:inline-flex;align-items:center;gap:4px;margin:3px 3px 0 0;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;cursor:pointer;background:#f5f4f0;color:#3d3c4a;border:1.5px solid #e2e1dc;transition:all .15s;user-select:none">'+o.icon+' '+o.val+'</span>';
+    }).join('');
+  }
+
+  function toggleFmt(el) {
+    const val = el.getAttribute('data-fmt');
+    const active = el.style.background === 'rgb(79, 70, 229)';
+    if (active) {
+      state.fmt.delete(val);
+      el.style.background  = '#f5f4f0';
+      el.style.color       = '#3d3c4a';
+      el.style.borderColor = '#e2e1dc';
+    } else {
+      state.fmt.add(val);
+      el.style.background  = '#4f46e5';
+      el.style.color       = '#fff';
+      el.style.borderColor = '#4f46e5';
+    }
+  }
+
+  function syncNoteTable() {
+    const tbody = document.getElementById('note-tbody');
+    // Lấy danh sách kỹ năng đang active (không tính card "Kỹ năng khác")
+    const activeSkills = [...document.querySelectorAll('#skills .skill-card.active')]
+      .filter(c => c.id !== 'card-other-skill')
+      .map(c => c.querySelector('.skill-name').textContent.trim());
+
+    // Giữ lại nội dung các ô đã nhập theo tên kỹ năng
+    const saved = {};
+    tbody.querySelectorAll('tr[data-skill]').forEach(tr => {
+      const sk = tr.getAttribute('data-skill');
+      saved[sk] = {
+        content: tr.querySelector('.nc').value,
+        issue:   tr.querySelector('.ni').value,
+      };
+    });
+
+    tbody.innerHTML = '';
+
+    if (activeSkills.length === 0) {
+      tbody.innerHTML = '<tr id="note-empty-row"><td colspan="4" style="text-align:center;padding:18px;color:var(--ink3);font-size:13px;">👆 Chọn kỹ năng ở mục 02 để tự động thêm dòng vào đây</td></tr>';
+      return;
+    }
+
+    activeSkills.forEach(function(sk) {
+      const prev = saved[sk] || { content: '', issue: '' };
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-skill', sk);
+      tr.innerHTML =
+        '<td style="padding:10px 12px;font-size:13px;font-weight:600;color:var(--ink);vertical-align:middle;background:#fafaf9;border-right:1px solid var(--border)">' + sk + '</td>' +
+        '<td style="padding:4px 8px;border-right:1px solid var(--border);vertical-align:top">' + fmtChips() + '</td>' +
+        '<td style="padding:0;border-right:1px solid var(--border)"><textarea class="nc" placeholder="Nội dung cần tìm hiểu..." style="width:100%;border:none;background:transparent;padding:10px 12px;font-family:inherit;font-size:13px;min-height:70px;resize:vertical;outline:none;color:var(--ink)">' + prev.content + '</textarea></td>' +
+        '<td style="padding:0"><textarea class="ni" placeholder="Vướng mắc của bạn..." style="width:100%;border:none;background:transparent;padding:10px 12px;font-family:inherit;font-size:13px;min-height:70px;resize:vertical;outline:none;color:var(--ink)">' + prev.issue + '</textarea></td>';
+      tbody.appendChild(tr);
+    });
+
+    // Thêm dòng "Kỹ năng khác" nếu card other đang active
+    const otherCard = document.getElementById('card-other-skill');
+    if (otherCard && otherCard.classList.contains('active')) {
+      const otherVal = document.getElementById('other-skill-input').value.trim() || 'Kỹ năng khác';
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-skill', '__other__');
+      tr.innerHTML =
+        '<td style="padding:10px 12px;font-size:13px;font-weight:600;color:var(--ink);vertical-align:middle;background:#fafaf9;border-right:1px solid var(--border)">' + otherVal + '</td>' +
+        '<td style="padding:4px 8px;border-right:1px solid var(--border);vertical-align:top">' + fmtChips() + '</td>' +
+        '<td style="padding:0;border-right:1px solid var(--border)"><textarea class="nc" placeholder="Nội dung cần tìm hiểu..." style="width:100%;border:none;background:transparent;padding:10px 12px;font-family:inherit;font-size:13px;min-height:70px;resize:vertical;outline:none;color:var(--ink)"></textarea></td>' +
+        '<td style="padding:0"><textarea class="ni" placeholder="Vướng mắc của bạn..." style="width:100%;border:none;background:transparent;padding:10px 12px;font-family:inherit;font-size:13px;min-height:70px;resize:vertical;outline:none;color:var(--ink)"></textarea></td>';
+      tbody.appendChild(tr);
+    }
+  }
+
+  function toggleOtherSkill(el) {
+    el.classList.toggle('active');
+    const wrap = document.getElementById('other-skill-wrap');
+    wrap.classList.toggle('show', el.classList.contains('active'));
+    if (!el.classList.contains('active')) {
+      document.getElementById('other-skill-input').value = '';
+    }
+    updateProgress();
+    syncNoteTable();
+  }
+
+  function updateProgress() {
+    let count = 0;
+    if (state.role) count++;
+    const otherSkillActive = document.getElementById('card-other-skill').classList.contains('active');
+    const otherSkillVal = document.getElementById('other-skill-input').value.trim();
+    if (state.skills.size > 0 || (otherSkillActive && otherSkillVal)) count++;
+    if (document.getElementById('email').value.trim()) count++;
+    const tableHasData = !!document.querySelector('#note-tbody tr[data-skill] textarea.nc, #note-tbody tr[data-skill] textarea.ni');
+    if (tableHasData) count++;
+    const pct = Math.round((count / 4) * 100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = count + ' / 4 mục';
+  }
+
+
+  async function submitForm() {
+    const errEl = document.getElementById('err-msg');
+    errEl.style.display = 'none';
+
+    if (!state.role) {
+      errEl.textContent = 'Bạn chưa chọn vai trò!';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const otherSkillActive = document.getElementById('card-other-skill').classList.contains('active');
+    const otherSkillVal = document.getElementById('other-skill-input').value.trim();
+    const allSkills = [...state.skills];
+    if (otherSkillActive && otherSkillVal) allSkills.push(otherSkillVal);
+
+    if (allSkills.length === 0) {
+      errEl.textContent = 'Chọn ít nhất 1 kỹ năng bạn quan tâm nhé!';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const emailVal = document.getElementById('email').value.trim();
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      errEl.textContent = 'Email chưa đúng định dạng, kiểm tra lại nhé!';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('btn');
+    const btnText = document.getElementById('btn-text');
+    btn.disabled = true;
+    btnText.textContent = 'Đang gửi...';
+
+    const tableRows = [];
+    document.querySelectorAll('#note-tbody tr[data-skill]').forEach(function(tr) {
+      const sk = tr.getAttribute('data-skill') === '__other__'
+        ? (document.getElementById('other-skill-input').value.trim() || 'Kỹ năng khác')
+        : tr.getAttribute('data-skill');
+      const ct = tr.querySelector('.nc') ? tr.querySelector('.nc').value.trim() : '';
+      const is = tr.querySelector('.ni') ? tr.querySelector('.ni').value.trim() : '';
+      if (ct || is) tableRows.push('['+sk+'] ND: '+ct+' | Vuong mac: '+is);
+    });
+    const payload = {
+      role:   state.role,
+      skills: allSkills.join(', '),
+      format: state.fmt.size > 0 ? [...state.fmt].join(', ') : '(chưa chọn)',
+      email:  emailVal || '(không điền)',
+      note:   tableRows.join(' // ') || '(không điền)'
+    };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      showSuccess(payload);
+    } catch (err) {
+      btn.disabled = false;
+      btnText.textContent = 'Gửi khảo sát';
+      errEl.textContent = 'Gửi thất bại, kiểm tra lại kết nối nhé!';
+      errEl.style.display = 'block';
+    }
+  }
+
+  function showSuccess(payload) {
+    document.getElementById('form-view').style.display = 'none';
+    const sc = document.getElementById('success-screen');
+    sc.style.display = 'block';
+    document.getElementById('s-role').textContent   = payload.role;
+    document.getElementById('s-skills').textContent = payload.skills;
+    document.getElementById('s-fmt').textContent    = payload.format;
+    document.getElementById('s-email').textContent  = payload.email;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
